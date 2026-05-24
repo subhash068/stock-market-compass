@@ -16,6 +16,7 @@ import { Route as AppPortfolioRouteImport } from './routes/_app/portfolio'
 import { Route as AppNewsRouteImport } from './routes/_app/news'
 import { Route as AppMarketsRouteImport } from './routes/_app/markets'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
+import { Route as AppAiRouteImport } from './routes/_app/ai'
 import { Route as AppStocksSymbolRouteImport } from './routes/_app/stocks.$symbol'
 
 const AppRoute = AppRouteImport.update({
@@ -52,6 +53,11 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAiRoute = AppAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppStocksSymbolRoute = AppStocksSymbolRouteImport.update({
   id: '/stocks/$symbol',
   path: '/stocks/$symbol',
@@ -60,6 +66,7 @@ const AppStocksSymbolRoute = AppStocksSymbolRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai': typeof AppAiRoute
   '/dashboard': typeof AppDashboardRoute
   '/markets': typeof AppMarketsRoute
   '/news': typeof AppNewsRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai': typeof AppAiRoute
   '/dashboard': typeof AppDashboardRoute
   '/markets': typeof AppMarketsRoute
   '/news': typeof AppNewsRoute
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/_app/ai': typeof AppAiRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/markets': typeof AppMarketsRoute
   '/_app/news': typeof AppNewsRoute
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai'
     | '/dashboard'
     | '/markets'
     | '/news'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai'
     | '/dashboard'
     | '/markets'
     | '/news'
@@ -110,6 +121,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_app'
+    | '/_app/ai'
     | '/_app/dashboard'
     | '/_app/markets'
     | '/_app/news'
@@ -174,6 +186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/ai': {
+      id: '/_app/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AppAiRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/stocks/$symbol': {
       id: '/_app/stocks/$symbol'
       path: '/stocks/$symbol'
@@ -185,6 +204,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppAiRoute: typeof AppAiRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppMarketsRoute: typeof AppMarketsRoute
   AppNewsRoute: typeof AppNewsRoute
@@ -194,6 +214,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAiRoute: AppAiRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppMarketsRoute: AppMarketsRoute,
   AppNewsRoute: AppNewsRoute,
