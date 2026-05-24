@@ -36,32 +36,25 @@ function CandleShape(props: {
   width?: number;
   height?: number;
   payload?: { o: number; h: number; l: number; c: number };
-  yAxis?: { scale: (v: number) => number };
 }) {
-  const { x = 0, width = 4, payload, yAxis } = props;
-  if (!payload || !yAxis) return null;
+  const { x = 0, y = 0, width = 4, height = 0, payload } = props;
+  if (!payload) return null;
   const { o, h, l, c } = payload;
+  if (h === l) return null;
   const up = c >= o;
   const color = up ? "var(--bull)" : "var(--bear)";
-  const yHigh = yAxis.scale(h);
-  const yLow = yAxis.scale(l);
-  const yOpen = yAxis.scale(o);
-  const yClose = yAxis.scale(c);
+  // y is pixel of high, y + height is pixel of low
+  const priceToY = (p: number) => y + ((h - p) / (h - l)) * height;
+  const yOpen = priceToY(o);
+  const yClose = priceToY(c);
   const top = Math.min(yOpen, yClose);
   const bodyHeight = Math.max(1, Math.abs(yClose - yOpen));
   const cx = x + width / 2;
   const bodyW = Math.max(2, width * 0.7);
   return (
     <g>
-      <line x1={cx} x2={cx} y1={yHigh} y2={yLow} stroke={color} strokeWidth={1} />
-      <rect
-        x={cx - bodyW / 2}
-        y={top}
-        width={bodyW}
-        height={bodyHeight}
-        fill={color}
-        opacity={up ? 0.95 : 0.95}
-      />
+      <line x1={cx} x2={cx} y1={y} y2={y + height} stroke={color} strokeWidth={1} />
+      <rect x={cx - bodyW / 2} y={top} width={bodyW} height={bodyHeight} fill={color} />
     </g>
   );
 }
