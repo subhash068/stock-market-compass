@@ -13,6 +13,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppWatchlistRouteImport } from './routes/_app/watchlist'
 import { Route as AppPortfolioRouteImport } from './routes/_app/portfolio'
+import { Route as AppMarketsRouteImport } from './routes/_app/markets'
 import { Route as AppDashboardRouteImport } from './routes/_app/dashboard'
 import { Route as AppStocksSymbolRouteImport } from './routes/_app/stocks.$symbol'
 
@@ -35,6 +36,11 @@ const AppPortfolioRoute = AppPortfolioRouteImport.update({
   path: '/portfolio',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMarketsRoute = AppMarketsRouteImport.update({
+  id: '/markets',
+  path: '/markets',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -49,6 +55,7 @@ const AppStocksSymbolRoute = AppStocksSymbolRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AppDashboardRoute
+  '/markets': typeof AppMarketsRoute
   '/portfolio': typeof AppPortfolioRoute
   '/watchlist': typeof AppWatchlistRoute
   '/stocks/$symbol': typeof AppStocksSymbolRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AppDashboardRoute
+  '/markets': typeof AppMarketsRoute
   '/portfolio': typeof AppPortfolioRoute
   '/watchlist': typeof AppWatchlistRoute
   '/stocks/$symbol': typeof AppStocksSymbolRoute
@@ -65,6 +73,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/markets': typeof AppMarketsRoute
   '/_app/portfolio': typeof AppPortfolioRoute
   '/_app/watchlist': typeof AppWatchlistRoute
   '/_app/stocks/$symbol': typeof AppStocksSymbolRoute
@@ -74,16 +83,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/markets'
     | '/portfolio'
     | '/watchlist'
     | '/stocks/$symbol'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/portfolio' | '/watchlist' | '/stocks/$symbol'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/markets'
+    | '/portfolio'
+    | '/watchlist'
+    | '/stocks/$symbol'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/_app/dashboard'
+    | '/_app/markets'
     | '/_app/portfolio'
     | '/_app/watchlist'
     | '/_app/stocks/$symbol'
@@ -124,6 +141,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPortfolioRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/markets': {
+      id: '/_app/markets'
+      path: '/markets'
+      fullPath: '/markets'
+      preLoaderRoute: typeof AppMarketsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -143,6 +167,7 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppMarketsRoute: typeof AppMarketsRoute
   AppPortfolioRoute: typeof AppPortfolioRoute
   AppWatchlistRoute: typeof AppWatchlistRoute
   AppStocksSymbolRoute: typeof AppStocksSymbolRoute
@@ -150,6 +175,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppMarketsRoute: AppMarketsRoute,
   AppPortfolioRoute: AppPortfolioRoute,
   AppWatchlistRoute: AppWatchlistRoute,
   AppStocksSymbolRoute: AppStocksSymbolRoute,
